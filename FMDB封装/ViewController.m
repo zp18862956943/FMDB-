@@ -23,31 +23,42 @@
     self.queue = [FMDatabaseQueue databaseQueueWithPath:path];
     
 
-    [self delete];
+    //删
+//    [self delete];
    
+    //建表
+    [self creatTableWithTableName:@"user"];
+    
+    [self insertIntoTableName:@"user"];
+    [self query];
+    [self deleteOne];
+}
+
+//建表
+-(void)creatTableWithTableName:(NSString *)tableName
+{
     //通过block，拿到FMDatabase *db
     [self.queue inDatabase:^(FMDatabase *db) {
         //创表
-        BOOL result = [db executeUpdate:@"create table if not exists t_student(id integer primary key autoincrement,name text,age integer,sex text);"];
+       NSString *str = [NSString stringWithFormat:@"create table if not exists %@(id integer primary key autoincrement,name text,age integer,sex text);",tableName];
+        BOOL result = [db executeUpdate:str];
         if (result) {
             NSLog(@"创表成功");
         }
     }];
     
-    [self insert];
-    [self query];
-    [self deleteOne];
 }
-
 //插入
-- (void)insert
+- (void)insertIntoTableName:(NSString *)tableName
 {    //通过block，拿到FMDatabase *db
     [self.queue inDatabase:^(FMDatabase *db) {
         for (int i = 0; i<40; i++) {
             NSString *name = [NSString stringWithFormat:@"rose-%d", arc4random() % 1000];
             NSNumber *age = @(arc4random() % 100 + 1);
             NSString *sex = [NSString stringWithFormat:@"female-%d", arc4random() % 1000];
-            [db executeUpdate:@"insert into t_student (name, age,sex) values (?, ?, ?);", name, age,sex];
+            
+            [db executeUpdate:[NSString stringWithFormat:@"insert into %@ (name, age,sex) values (?, ?, ?);",tableName], name, age,sex];
+
         }
     }];
 }
