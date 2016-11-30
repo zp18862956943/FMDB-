@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		409FB94F1DEE5A100079A2A4 /* ZPDBTool.m in Sources */ = {isa = PBXBuildFile; fileRef = 409FB94E1DEE5A100079A2A4 /* ZPDBTool.m */; };
 		40E748A61DE7D30000C6685A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E748A51DE7D30000C6685A /* main.m */; };
 		40E748A91DE7D30000C6685A /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E748A81DE7D30000C6685A /* AppDelegate.m */; };
 		40E748AC1DE7D30000C6685A /* ViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 40E748AB1DE7D30000C6685A /* ViewController.m */; };
@@ -43,6 +44,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		409FB94D1DEE5A100079A2A4 /* ZPDBTool.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ZPDBTool.h; sourceTree = "<group>"; };
+		409FB94E1DEE5A100079A2A4 /* ZPDBTool.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ZPDBTool.m; sourceTree = "<group>"; };
 		40E748A11DE7D2FF00C6685A /* FMDB封装.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "FMDB封装.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		40E748A51DE7D30000C6685A /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		40E748A71DE7D30000C6685A /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -132,6 +135,8 @@
 				40E748A81DE7D30000C6685A /* AppDelegate.m */,
 				40E748AA1DE7D30000C6685A /* ViewController.h */,
 				40E748AB1DE7D30000C6685A /* ViewController.m */,
+				409FB94D1DEE5A100079A2A4 /* ZPDBTool.h */,
+				409FB94E1DEE5A100079A2A4 /* ZPDBTool.m */,
 				40E748D71DE7D31900C6685A /* YZKDBTool.h */,
 				40E748D81DE7D31900C6685A /* YZKDBTool.m */,
 				40E748EE1DE8077D00C6685A /* Json+Dic.h */,
@@ -335,6 +340,7 @@
 			files = (
 				40E748D91DE7D31900C6685A /* YZKDBTool.m in Sources */,
 				40E748E91DE7D36700C6685A /* FMDatabaseQueue.m in Sources */,
+				409FB94F1DEE5A100079A2A4 /* ZPDBTool.m in Sources */,
 				40E748AC1DE7D30000C6685A /* ViewController.m in Sources */,
 				40E748A91DE7D30000C6685A /* AppDelegate.m in Sources */,
 				40E748E61DE7D36700C6685A /* FMDatabase.m in Sources */,
@@ -580,6 +586,7 @@
 				40E748D01DE7D30100C6685A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		40E748D11DE7D30100C6685A /* Build configuration list for PBXNativeTarget "FMDB封装Tests" */ = {
 			isa = XCConfigurationList;
@@ -588,6 +595,7 @@
 				40E748D31DE7D30100C6685A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		40E748D41DE7D30100C6685A /* Build configuration list for PBXNativeTarget "FMDB封装UITests" */ = {
 			isa = XCConfigurationList;
@@ -596,6 +604,7 @@
 				40E748D61DE7D30100C6685A /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

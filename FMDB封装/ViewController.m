@@ -7,53 +7,90 @@
 //
 
 #import "ViewController.h"
-#import "YZKDBTool.h"
 #import "Json+Dic.h"
+#import "ZPDBTool.h"
 @interface ViewController ()
-
+@property(nonatomic,strong)FMDatabaseQueue *queue;
 @end
 
 @implementation ViewController
 
 - (void)viewDidLoad {
-    [super viewDidLoad];
-
-       //创建数据库
-    FMDatabase *dataBase = [[YZKDBTool tool]getDBWithDBName:@"userName.sqlite"];
-    [[YZKDBTool tool]getDBWithDBName:@"userName.sqlite"];
-    [[YZKDBTool tool]getDBWithDBName:@"userName.sqlite"];
-    [[YZKDBTool tool]DataBase:dataBase createTable:@"nameA" keyTypes:@{@"key":@"text"}];
-    [[YZKDBTool tool]DataBase:dataBase createTable:@"nameB" keyTypes:@{@"key":@"text"}];
-
-//    [[YZKDBTool tool]DataBase:dataBase insertKeyValues:@{@"key":@"啊啊"} intoTable:@"nameA"];
-        [[YZKDBTool tool]clearDatabase:dataBase from:@"nameA"];
-
-        [[YZKDBTool tool]clearDatabase:dataBase from:@"nameB"];
-
-
-    NSDictionary *dic = [NSDictionary dictionaryWithObjectsAndKeys:@"today is good",@"content",@"2016.5.12",@"data", nil];
-    for (int i = 0; i < 50; i++) {
-        [[YZKDBTool tool]DataBase:dataBase insertKeyValues:@{@"key":[Json_Dic ToJsonWithDic:dic]} intoTable:@"nameA"];
-    }
-    for (int i = 0; i < 60; i++) {
-        [[YZKDBTool tool]DataBase:dataBase insertKeyValues:@{@"key":[NSString stringWithFormat:@"value%d",i]} intoTable:@"nameB"];
-    }
+    //使用数据库队列操作数据，fmdb线程是不安全的，建议使用FMDatabaseQueue
+    NSString *path = [[NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES) lastObject] stringByAppendingPathComponent:@"data.sqlite"];
+    NSLog(@"%@",path);
+    //里面已经创建了FMDdataBase实例，数据库实例
+    self.queue = [FMDatabaseQueue databaseQueueWithPath:path];
     
-    //查询
-   NSArray *arr = [[YZKDBTool tool]DataBase:dataBase selectKeyTypes:@{@"key":@"text"} fromTable:@"nameA"];
-    NSLog(@"%@",arr);
 
-
+    [self delete];
+   
+    //通过block，拿到FMDatabase *db
+    [self.queue inDatabase:^(FMDatabase *db) {
+        //创表
+        BOOL result = [db executeUpdate:@"create table if not exists t_student(id integer primary key autoincrement,name text,age integer,sex text);"];
+        if (result) {
+            NSLog(@"创表成功");
+        }
+    }];
     
-    
-    
+    [self insert];
+    [self query];
+    [self deleteOne];
 }
 
-
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+//插入
+- (void)insert
+{    //通过block，拿到FMDatabase *db
+    [self.queue inDatabase:^(FMDatabase *db) {
+        for (int i = 0; i<40; i++) {
+            NSString *name = [NSString stringWithFormat:@"rose-%d", arc4random() % 1000];
+            NSNumber *age = @(arc4random() % 100 + 1);
+            NSString *sex = [NSString stringWithFormat:@"female-%d", arc4random() % 1000];
+            [db executeUpdate:@"insert into t_student (name, age,sex) values (?, ?, ?);", name, age,sex];
+        }
+    }];
 }
 
+//更新数据
+- (void)update
+{
+    [self.queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:@"update t_student set age = ? where name = ?;", @20, @"jack"];
+        [db executeUpdate:@"update t_student set age = ? where name = ?;", @20, @"jack"];
+    }];
+}
 
+//删表
+- (void)delete
+{
+    [self.queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:[NSString stringWithFormat:@"DELETE FROM %@",@"t_student"]];
+    }];
+}
+
+//删除表中的某个记录
+-(void)deleteOne
+{
+    [self.queue inDatabase:^(FMDatabase *db) {
+        [db executeUpdate:[NSString stringWithFormat:@"DELETE FROM %@ WHERE id = %d",@"t_student",290]];
+    }];
+}
+//查询
+- (void)query
+{
+    [self.queue inDatabase:^(FMDatabase *db) {
+        // 1.查询数据
+        FMResultSet *rs = [db executeQuery:@"select * from t_student WHERE age > ?;", @50];
+        NSLog(@"%@",rs);
+        // 2.遍历结果集
+        while (rs.next) {
+            int ID = [rs intForColumn:@"id"];
+            NSString *name = [rs stringForColumn:@"name"];
+            int age = [rs intForColumn:@"age"];
+            
+            NSLog(@"%d %@ %d", ID, name, age);
+        }
+    }];
+}
 @end
